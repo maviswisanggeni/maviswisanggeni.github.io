@@ -25,6 +25,7 @@ body {
 	text-transform: uppercase;
 	z-index: 10000;
 	font-size: 4vw;
+	mix-blend-mode: difference;
 }
 
 .content__img {
