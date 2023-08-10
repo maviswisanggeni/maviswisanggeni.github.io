@@ -157,4 +157,28 @@
 	preloadImages().then(() => {
 		new ImageTrail();
 	});
+
+	// title tag marquee
+	var documentTitle = document.title + " ― ";
+	
+	(function titleMarquee() {
+		document.title = documentTitle = documentTitle.substring(1) + documentTitle.substring(0,1);
+		setTimeout(titleMarquee, 300);
+	})();
+
+	// if .cv hovered then change text to "Download CV"
+	const cv = document.querySelector(".cv");
+	
+	cv.addEventListener("mouseover", () => {
+		cv.innerHTML = "open";
+	});
+
+	cv.addEventListener("mouseout", () => {
+		cv.innerHTML = "CV";
+	});
+
+	// if cv clicked then auto download cv file pdf
+	cv.addEventListener("click", () => {
+		window.open("assets/cv.pdf", "_blank");
+	});
 }
