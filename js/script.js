@@ -166,7 +166,6 @@
 		setTimeout(titleMarquee, 300);
 	})();
 
-	// if .cv hovered then change text to "Download CV"
 	const cv = document.querySelector(".cv");
 	
 	cv.addEventListener("mouseover", () => {
@@ -177,7 +176,6 @@
 		cv.innerHTML = "CV";
 	});
 
-	// if cv clicked then auto download cv file pdf
 	cv.addEventListener("click", () => {
 		window.open("assets/cv.pdf", "_blank");
 	});
