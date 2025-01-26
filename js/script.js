@@ -1,160 +1,204 @@
 {
-	const body = document.body;
+  const body = document.body;
+  const tl = gsap.timeline();
 
-	// helper functions
-	const MathUtils = {
-		lerp: (a, b, n) => (1 - n) * a + n * b,
-		distance: (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1),
-	};
+  tl.from(".line span", 1.8, {
+    y: 100,
+    ease: "power4.out",
+    delay: 1,
+    skewY: 7,
+    stagger: {
+      amount: 0.3,
+    },
+  });
 
-	// get the mouse position
-	const getMousePos = (ev) => {
-		let posx = 0;
-		let posy = 0;
-		if (!ev) ev = window.event;
-		if (ev.pageX || ev.pageY) {
-			posx = ev.pageX;
-			posy = ev.pageY;
-		} else if (ev.clientX || ev.clientY) {
-			posx = ev.clientX + body.scrollLeft + docEl.scrollLeft;
-			posy = ev.clientY + body.scrollTop + docEl.scrollTop;
-		}
-		return { x: posx, y: posy };
-	};
+  // helper functions
+  const MathUtils = {
+    lerp: (a, b, n) => (1 - n) * a + n * b,
+    distance: (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1),
+  };
 
-	let mousePos = (lastMousePos = cacheMousePos = { x: 0, y: 0 });
+  // get the mouse position
+  const getMousePos = (ev) => {
+    let posx = 0;
+    let posy = 0;
+    if (!ev) ev = window.event;
+    if (ev.pageX || ev.pageY) {
+      posx = ev.pageX;
+      posy = ev.pageY;
+    } else if (ev.clientX || ev.clientY) {
+      posx = ev.clientX + body.scrollLeft + docEl.scrollLeft;
+      posy = ev.clientY + body.scrollTop + docEl.scrollTop;
+    }
+    return { x: posx, y: posy };
+  };
 
-	// update the mouse position
-	window.addEventListener("mousemove", (ev) => (mousePos = getMousePos(ev)));
+  let mousePos = (lastMousePos = cacheMousePos = { x: 0, y: 0 });
 
-	const getMouseDistance = () =>
-		MathUtils.distance(mousePos.x, mousePos.y, lastMousePos.x, lastMousePos.y);
+  // update the mouse position
+  window.addEventListener("mousemove", (ev) => (mousePos = getMousePos(ev)));
 
-	class Image {
-		constructor(el) {
-			this.DOM = { el: el };
-			this.defaultStyle = {
-				scale: 1,
-				x: 0,
-				y: 0,
-				opacity: 0,
-			};
-			this.getRect();
-		}
+  const getMouseDistance = () =>
+    MathUtils.distance(mousePos.x, mousePos.y, lastMousePos.x, lastMousePos.y);
 
-		getRect() {
-			this.rect = this.DOM.el.getBoundingClientRect();
-		}
-		isActive() {
-			return TweenMax.isTweening(this.DOM.el) || this.DOM.el.style.opacity != 0;
-		}
-	}
+  class Image {
+    constructor(el) {
+      this.DOM = { el: el };
+      this.defaultStyle = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        opacity: 0,
+      };
+      this.getRect();
+    }
 
-	class ImageTrail {
-		constructor() {
-			this.DOM = { content: document.querySelector(".content") };
-			this.images = [];
-			[...this.DOM.content.querySelectorAll("img")].forEach((img) =>
-				this.images.push(new Image(img))
-			);
-			this.imagesTotal = this.images.length;
-			this.imgPosition = 0;
-			this.zIndexVal = 1;
-			this.threshold = 100;
-			requestAnimationFrame(() => this.render());
-		}
-		render() {
-			let distance = getMouseDistance();
-			cacheMousePos.x = MathUtils.lerp(
-				cacheMousePos.x || mousePos.x,
-				mousePos.x,
-				0.1
-			);
-			cacheMousePos.y = MathUtils.lerp(
-				cacheMousePos.y || mousePos.y,
-				mousePos.y,
-				0.1
-			);
+    getRect() {
+      this.rect = this.DOM.el.getBoundingClientRect();
+    }
 
-			if (distance > this.threshold) {
-				this.showNextImage();
+    isActive() {
+      return gsap.isTweening(this.DOM.el) || this.DOM.el.style.opacity != 0;
+    }
+  }
 
-				++this.zIndexVal;
-				this.imgPosition =
-					this.imgPosition < this.imagesTotal - 1 ? this.imgPosition + 1 : 0;
+  class ImageTrail {
+    constructor() {
+      this.DOM = { content: document.querySelector(".content") };
+      this.images = [];
+      [...this.DOM.content.querySelectorAll("img")].forEach((img) =>
+        this.images.push(new Image(img))
+      );
+      this.imagesTotal = this.images.length;
+      this.imgPosition = 0;
+      this.zIndexVal = 1;
+      this.threshold = 100;
+      requestAnimationFrame(() => this.render());
+    }
 
-				lastMousePos = mousePos;
-			}
+    render() {
+      let distance = getMouseDistance();
+      cacheMousePos.x = MathUtils.lerp(
+        cacheMousePos.x || mousePos.x,
+        mousePos.x,
+        0.1
+      );
+      cacheMousePos.y = MathUtils.lerp(
+        cacheMousePos.y || mousePos.y,
+        mousePos.y,
+        0.1
+      );
 
-			let isIdle = true;
-			for (let img of this.images) {
-				if (img.isActive()) {
-					isIdle = false;
-					break;
-				}
-			}
-			if (isIdle && this.zIndexVal !== 1) {
-				this.zIndexVal = 1;
-			}
+      if (distance > this.threshold) {
+        this.showNextImage();
+        ++this.zIndexVal;
+        this.imgPosition =
+          this.imgPosition < this.imagesTotal - 1 ? this.imgPosition + 1 : 0;
 
-			requestAnimationFrame(() => this.render());
-		}
-		showNextImage() {
-			const img = this.images[this.imgPosition];
-			TweenMax.killTweensOf(img.DOM.el);
+        lastMousePos = mousePos;
+      }
 
-			new TimelineMax()
-				.set(
-					img.DOM.el,
-					{
-						startAt: { opacity: 0, scale: 1 },
-						opacity: 1,
-						scale: 1,
-						zIndex: this.zIndexVal,
-						x: cacheMousePos.x - img.rect.width / 2,
-						y: cacheMousePos.y - img.rect.height / 2,
-					},
-					0
-				)
-				.to(
-					img.DOM.el,
-					0.9,
-					{
-						ease: Expo.easeOut,
-						x: mousePos.x - img.rect.width / 2,
-						y: mousePos.y - img.rect.height / 2,
-					},
-					0
-				)
-				.to(
-					img.DOM.el,
-					1,
-					{
-						ease: Power1.easeOut,
-						opacity: 0,
-					},
-					0.4
-				)
-				.to(
-					img.DOM.el,
-					1,
-					{
-						ease: Quint.easeOut,
-						scale: 0.2,
-					},
-					0.4
-				);
-		}
-	}
+      let isIdle = true;
+      for (let img of this.images) {
+        if (img.isActive()) {
+          isIdle = false;
+          break;
+        }
+      }
+      if (isIdle && this.zIndexVal !== 1) {
+        this.zIndexVal = 1;
+      }
 
-	// preload images
-	const preloadImages = () => {
-		return new Promise((resolve, reject) => {
-			imagesLoaded(document.querySelectorAll(".content__img"), resolve);
-		});
-	};
+      requestAnimationFrame(() => this.render());
+    }
 
-	preloadImages().then(() => {
-		new ImageTrail();
-	});
+    showNextImage() {
+      const img = this.images[this.imgPosition];
+      gsap.killTweensOf(img.DOM.el);
+
+      gsap
+        .timeline()
+        .set(
+          img.DOM.el,
+          {
+            startAt: { opacity: 0, scale: 1 },
+            opacity: 1,
+            scale: 1,
+            zIndex: this.zIndexVal,
+            x: cacheMousePos.x - img.rect.width / 2,
+            y: cacheMousePos.y - img.rect.height / 2,
+          },
+          0
+        )
+        .to(
+          img.DOM.el,
+          0.9,
+          {
+            ease: "expo.out",
+            x: mousePos.x - img.rect.width / 2,
+            y: mousePos.y - img.rect.height / 2,
+          },
+          0
+        )
+        .to(
+          img.DOM.el,
+          1,
+          {
+            ease: "power1.out",
+            opacity: 0,
+          },
+          0.4
+        )
+        .to(
+          img.DOM.el,
+          1,
+          {
+            ease: "quint.out",
+            scale: 0.2,
+          },
+          0.4
+        );
+    }
+  }
+
+  // preload images
+  const preloadImages = () => {
+    return new Promise((resolve, reject) => {
+      imagesLoaded(document.querySelectorAll(".content__img"), resolve);
+    });
+  };
+
+  preloadImages().then(() => {
+    new ImageTrail();
+  });
 }
+
+// title tag marquee
+var documentTitle = document.title + " ― ";
+
+(function titleMarquee() {
+  document.title = documentTitle =
+    documentTitle.substring(1) + documentTitle.substring(0, 1);
+  setTimeout(titleMarquee, 300);
+})();
+
+const cv = document.querySelector(".cv");
+
+// Fade-in effect for .cv on page load
+gsap.fromTo(
+  cv,
+  { opacity: 0 },
+  { opacity: 1, duration: 0.5, delay: 2, ease: "expo.out" }
+);
+
+cv.addEventListener("mouseover", () => {
+  cv.innerHTML = "open";
+});
+
+cv.addEventListener("mouseout", () => {
+  cv.innerHTML = "CV";
+});
+
+cv.addEventListener("click", () => {
+  window.open("assets/cv.pdf", "_blank");
+});
