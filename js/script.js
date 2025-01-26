@@ -72,7 +72,7 @@
       this.imagesTotal = this.images.length;
       this.imgPosition = 0;
       this.zIndexVal = 1;
-      this.threshold = 100;
+      this.threshold = 120;
       requestAnimationFrame(() => this.render());
     }
 
