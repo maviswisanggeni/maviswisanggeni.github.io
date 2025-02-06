@@ -202,3 +202,10 @@ cv.addEventListener("mouseout", () => {
 cv.addEventListener("click", () => {
   window.open("assets/cv.pdf", "_blank");
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const audio = document.getElementById("bg-audio");
+
+  audio.muted = false;
+  audio.play();
+});
