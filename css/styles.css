@@ -22,22 +22,23 @@ body {
 
 .cv {
   font-family: "OTF® Glusp", Arial, sans-serif;
-  text-transform: uppercase;
+  text-transform: lowercase;
   z-index: 10000;
   font-size: 1.5em;
   mix-blend-mode: difference;
-  font-weight: 600;
   background-color: rgb(28, 28, 28);
   color: #808080;
   cursor: pointer;
   position: absolute;
-  /* top: 50%;
-	left: 66.5%; */
   top: 10%;
   right: 10%;
-  /* transform: translate(0, -25%); */
-  padding: 2px 10px;
+  padding: 4px 10px;
   animation: shake 2s infinite;
+  border-radius: 5px;
+}
+
+.cv:hover {
+  color: #fff;
 }
 
 .content__img {
@@ -84,6 +85,32 @@ body {
   mix-blend-mode: difference;
 }
 
+.audio-toggle {
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  background-color: transparent;
+  color: #808080;
+  height: 35px;
+  width: fit-content;
+  padding: 0 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 99999;
+  font-size: 16px;
+  font-family: "OTF® Glusp", Arial, sans-serif;
+  transition: 0.3s;
+  border-style: none;
+  mix-blend-mode: difference;
+}
+
+.audio-toggle:hover {
+  background-color: rgb(28, 28, 28);
+  color: #fff;
+}
+
 @keyframes shake {
   0% {
     transform: translate(0, 0) rotate(0);
@@ -103,25 +130,4 @@ body {
   100% {
     transform: translate(0, 0) rotate(0);
   }
-}
-
-@keyframes shake {
-	0% {
-		transform: translate(0, 0) rotate(0);
-	}
-	20% {
-		transform: translate(-10px, 0) rotate(-20deg);
-	}
-	30% {
-		transform: translate(10px, 0) rotate(20deg);
-	}
-	50% {
-		transform: translate(-10px, 0) rotate(-10deg);
-	}
-	60% {
-		transform: translate(10px, 0) rotate(10deg);
-	}
-	100% {
-		transform: translate(0, 0) rotate(0);
-	}
 }

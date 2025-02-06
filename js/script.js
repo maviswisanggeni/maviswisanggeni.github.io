@@ -12,13 +12,11 @@
     },
   });
 
-  // helper functions
   const MathUtils = {
     lerp: (a, b, n) => (1 - n) * a + n * b,
     distance: (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1),
   };
 
-  // get the mouse position
   const getMousePos = (ev) => {
     let posx = 0;
     let posy = 0;
@@ -35,7 +33,6 @@
 
   let mousePos = (lastMousePos = cacheMousePos = { x: 0, y: 0 });
 
-  // update the mouse position
   window.addEventListener("mousemove", (ev) => (mousePos = getMousePos(ev)));
 
   const getMouseDistance = () =>
@@ -161,7 +158,6 @@
     }
   }
 
-  // preload images
   const preloadImages = () => {
     return new Promise((resolve, reject) => {
       imagesLoaded(document.querySelectorAll(".content__img"), resolve);
@@ -173,7 +169,6 @@
   });
 }
 
-// title tag marquee
 var documentTitle = document.title + " ― ";
 
 (function titleMarquee() {
@@ -184,7 +179,6 @@ var documentTitle = document.title + " ― ";
 
 const cv = document.querySelector(".cv");
 
-// Fade-in effect for .cv on page load
 gsap.fromTo(
   cv,
   { opacity: 0 },
@@ -192,7 +186,7 @@ gsap.fromTo(
 );
 
 cv.addEventListener("mouseover", () => {
-  cv.innerHTML = "open";
+  cv.innerHTML = "Open";
 });
 
 cv.addEventListener("mouseout", () => {
@@ -205,7 +199,30 @@ cv.addEventListener("click", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const audio = document.getElementById("bg-audio");
+  const audioToggle = document.getElementById("audio-toggle");
+
+  gsap.fromTo(
+    audioToggle,
+    { opacity: 0 },
+    { opacity: 1, duration: 0.2, delay: 2, ease: "expo.out" }
+  );
+
+  let isPlaying = false;
+
+  function toggleAudio() {
+    if (isPlaying) {
+      audio.pause();
+      audioToggle.textContent = "▶";
+    } else {
+      audio.play().catch((error) => {
+        console.log("Autoplay gagal, menunggu interaksi user...");
+      });
+      audioToggle.textContent = "❚❚";
+    }
+    isPlaying = !isPlaying;
+  }
+
+  audioToggle.addEventListener("click", toggleAudio);
 
   audio.muted = false;
-  audio.play();
 });
