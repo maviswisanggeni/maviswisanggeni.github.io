@@ -21,7 +21,7 @@ body {
   align-items: center;
 }
 
-.cv {
+.cv, .works {
   font-family: "OTF® Glusp", Arial, sans-serif;
   text-transform: lowercase;
   z-index: 10000;
@@ -38,7 +38,7 @@ body {
   border-radius: 5px;
 }
 
-.cv:hover {
+.cv:hover, .works:hover {
   color: #fff;
 }
 

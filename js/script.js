@@ -177,25 +177,25 @@ var documentTitle = document.title + " ― ";
   setTimeout(titleMarquee, 300);
 })();
 
-const cv = document.querySelector(".cv");
+// const cv = document.querySelector(".cv");
 
-gsap.fromTo(
-  cv,
-  { opacity: 0 },
-  { opacity: 1, duration: 0.5, delay: 2, ease: "expo.out" }
-);
+// gsap.fromTo(
+//   cv,
+//   { opacity: 0 },
+//   { opacity: 1, duration: 0.5, delay: 2, ease: "expo.out" }
+// );
 
-cv.addEventListener("mouseover", () => {
-  cv.innerHTML = "Open";
-});
+// cv.addEventListener("mouseover", () => {
+//   cv.innerHTML = "Open";
+// });
 
-cv.addEventListener("mouseout", () => {
-  cv.innerHTML = "CV";
-});
+// cv.addEventListener("mouseout", () => {
+//   cv.innerHTML = "CV";
+// });
 
-cv.addEventListener("click", () => {
-  window.open("assets/cv.pdf", "_blank");
-});
+// cv.addEventListener("click", () => {
+//   window.open("assets/cv.pdf", "_blank");
+// });
 
 document.addEventListener("DOMContentLoaded", () => {
   const audio = document.getElementById("bg-audio");
@@ -225,4 +225,24 @@ document.addEventListener("DOMContentLoaded", () => {
   audioToggle.addEventListener("click", toggleAudio);
 
   audio.muted = false;
+});
+
+const works = document.querySelector(".works");
+
+gsap.fromTo(
+  works,
+  { opacity: 0 },
+  { opacity: 1, duration: 0.5, delay: 2, ease: "expo.out" }
+);
+
+works.addEventListener("mouseover", () => {
+  works.innerHTML = "Open";
+});
+
+works.addEventListener("mouseout", () => {
+  works.innerHTML = "Works";
+});
+
+works.addEventListener("click", () => {
+  window.open("https://orrisyn.netlify.app/", "_blank");
 });
